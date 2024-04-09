@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { BarElement, CategoryScale, Chart as ChartJS, LinearScale } from 'chart.js'
+import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
 
 ChartJS.register(
     CategoryScale,
     LinearScale,
-    BarElement
+    BarElement,
+    Tooltip,
+    Legend
 )
 
 export const BarCharts = () => {
@@ -16,11 +18,8 @@ export const BarCharts = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await fetch(baseUrl, {
-                method: 'GET'
-            }).then((response) => {
+            await fetch(baseUrl).then((response) => {
                 response.json().then((json) => {
-                    console.log(json);
                     setChart(json.data)
                 }).catch(error => {
                     console.log(error);
@@ -28,13 +27,13 @@ export const BarCharts = () => {
             })
         }
         fetchData()
-    }, [])
+    }, [baseUrl])
 
     console.log("chart", chart);
     var data = {
-        labels: chart?.map(x => x.Nation),
+        labels: chart?.map(x => x.Year),
         datasets: [{
-            label: `${chart?.coins?.length} Coins Available`,
+            label: `United States`,
             data: chart?.map(x => x.Population),
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
@@ -50,32 +49,35 @@ export const BarCharts = () => {
                 'rgba(255, 206, 86, 1)',
                 'rgba(75, 192, 192, 1)',
                 'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
+            'rgba(255, 159, 64, 1)'
             ],
             borderWidth: 1
         }]
     };
 
     var options = {
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         scales: {
         },
         legend: {
-            display: true,
             labels: {
                 fontSize: 25,
             },
         },
+        title: {
+            display: true,
+            text: "aloo"
+        }
     }
 
     return (
         <div>
-        <Bar
-            data={data}
-            height={400}
-            options={options}
+            <Bar
+                data={data}
+                height={400}
+                options={options}
 
-        />
+            />
         </div>
     )
 }

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Dimmer, Loader, Select } from 'semantic-ui-react'
+import { Card, CardGroup, Dimmer, Loader, Select } from 'semantic-ui-react'
 
 
 function CryptoPrice() {
     
     const [loading, setLoading] = useState(true);
     const [priceData, setPriceData] = useState(null);
-    const [currency, setCurrency] = useState('USD');
+    const [coin, setCoin] = useState(null);
     
     const options = [{ value: 'USD', text: 'USD'}, {value: 'EUR', text: 'EUR'}, {value: 'GBP', text: 'GBP'}]
 
@@ -15,15 +15,13 @@ function CryptoPrice() {
             const res = await fetch("https://api.coindesk.com/v1/bpi/currentprice.json");
             const data = await res.json();
             console.log((data));
+            setCoin(data.chartName)
             setPriceData(data.bpi);
             setLoading(false);
         }
         fetchData()
     }, [])
 
-    const handleSelect = (e, data) => {
-        setCurrency(data.value)
-    }
     return (
         <div className='CryptoPrice'>
             {
@@ -43,18 +41,34 @@ function CryptoPrice() {
                             height: 300,
                             margin: '0 auto'
                         }}>
-                            <div className='form'>
-                                <Select placeholder="Select your currency" onChange={handleSelect} options={options} />
-                            </div>
-                            <div className='price'>
-                                <Card>
-                                    <Card.Content>
-                                        <Card.Header>{currency} Currency</Card.Header>
-                                        <Card.Description>
-                                            {priceData[currency].rate}
-                                        </Card.Description>
-                                    </Card.Content>
-                                </Card>
+                            <div className='price' style={{height: '1vh'}}>
+                                <h2>{coin} in multiple currencies</h2>
+                                <CardGroup>
+                                    <Card>
+                                        <Card.Content>
+                                            <Card.Header>{priceData['EUR'].description} Price</Card.Header>
+                                            <Card.Description>
+                                                {priceData['EUR'].rate}
+                                            </Card.Description>
+                                        </Card.Content>
+                                    </Card>
+                                    <Card>
+                                        <Card.Content>
+                                            <Card.Header>{priceData['GBP'].description} Price</Card.Header>
+                                            <Card.Description>
+                                                {priceData['GBP'].rate}
+                                            </Card.Description>
+                                        </Card.Content>
+                                    </Card>
+                                    <Card>
+                                        <Card.Content>
+                                            <Card.Header>{priceData['USD'].description} Price</Card.Header>
+                                            <Card.Description>
+                                                {priceData['USD'].rate}
+                                            </Card.Description>
+                                        </Card.Content>
+                                    </Card>
+                                </CardGroup>
                             </div>
                         </div>
                     </>

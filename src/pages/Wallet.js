@@ -1,10 +1,11 @@
 import React from 'react'
+import MetaMask from '../components/MetaMask'
 
 function Wallet() {
   return (
-    <div className='wallet'>
-        <h1>Wallet</h1>
-    </div>
+      <div className='wallet'>
+        {/* <MetaMask />     */}
+      </div>
   )
 }
 
